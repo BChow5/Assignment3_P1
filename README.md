@@ -34,9 +34,9 @@ The benefit of creating webgen as a system user because it has limited privilege
 
 1. Move both the provided `generate-index.service` and `generate-index.timer` files to `/etc/systemd/system`
 
-`sudo mv ~/generate-index.service /etc/systemd/system`
+`sudo mv ~/Assignment3_P1/generate-index.service /etc/systemd/system`
 
-`sudo mv ~/generate-index.timer /etc/systemd/system`
+`sudo mv ~/Assignment3_P1/generate-index.timer /etc/systemd/system`
 
 2. Reload Systemd After the Changes
 
@@ -54,9 +54,32 @@ The benefit of creating webgen as a system user because it has limited privilege
 
 - To check if the service ran successfully: `sudo systemctl status generate-index.service`
 
-- View logs for the service: `sudo journalctl -u generate-index.service`
+- View logs for generate-index.service: `sudo journalctl -u generate-index.service`
 
-- View logs for the timer: `sudo journalctl -u generate-index.timer`
+- View logs for the generate-index.timer: `sudo journalctl -u generate-index.timer`
+
+## Setting Up Nginx
+
+1. Open the `nginx.conf` file 
+
+`sudo nvim /etc/nginx/nginx.conf`
+
+2. Edit it to have `user webgen`
+
+3. Make folders for the server block 
+
+`mkdir /etc/nginx/sites-available`
+
+`mkdir /etc/nginx/sites-enabled`
+
+4. Add the provided server block file `sites.conf` to `/etc/nginx/sites-available`
+
+5. Create a symbolic link `ln -s /etc/nginx/sites-available/sites.conf /etc/nginx/sites-enabled/sites.conf`
+
+We create a seperate server block file instead of putting it in nginx.conf because it's easier to maintain. It's easier to add more sites by creatin new server block files into the `/etc/nginx/sites-available` folder and create symbolic links. 
+
+- You can use `sudo systemctl status nginx` to check the status. 
+- You can use `sudo nginx -t` to check the nginx configuration.
 
 
 
