@@ -2,11 +2,15 @@
 - A clone of the provided Git repository 
 - nginx and ufw packages installed
 
+<br>
+
 ## Creating the System User and Directory Structure
 
 1. Create the system user with home directory at /var/lib/webgen and a non-login shell:
 
 `sudo useradd -r -d /var/lib/webgen -s /usr/sbin/nologin webgen` 
+
+<br>
 
 **What does this do?**
 `-r`: Creates a system user.
@@ -30,7 +34,9 @@ The benefit of creating webgen as a system user because it has limited privilege
 
 `sudo chmod 700 /var/lib/webgen/bin/generate_index` 
 
-## Setting up the Timer and Service Files
+<br>
+
+## Setting up the `.timer` and `.service` Files for generate-index
 
 1. Move both the provided `generate-index.service` and `generate-index.timer` files to `/etc/systemd/system`
 
@@ -58,7 +64,9 @@ The benefit of creating webgen as a system user because it has limited privilege
 
 - View logs for the generate-index.timer: `sudo journalctl -u generate-index.timer`
 
-## Setting Up Nginx
+<br>
+
+## Setting Up `nginx`
 
 1. Open the `nginx.conf` file 
 
@@ -74,12 +82,53 @@ The benefit of creating webgen as a system user because it has limited privilege
 
 4. Add the provided server block file `sites.conf` to `/etc/nginx/sites-available`
 
-5. Create a symbolic link `ln -s /etc/nginx/sites-available/sites.conf /etc/nginx/sites-enabled/sites.conf`
+5. Create a symbolic link 
 
-We create a seperate server block file instead of putting it in nginx.conf because it's easier to maintain. It's easier to add more sites by creatin new server block files into the `/etc/nginx/sites-available` folder and create symbolic links. 
+`ln -s /etc/nginx/sites-available/sites.conf /etc/nginx/sites-enabled/sites.conf`
 
-- You can use `sudo systemctl status nginx` to check the status. 
-- You can use `sudo nginx -t` to check the nginx configuration.
+6. Start and enable nginx
+
+`sudo systemctl start nginx`
+
+`sudo systemctl enable nginx`
+
+We created a seperate server block file instead of putting it in nginx.conf because it's easier to maintain. We can add sites by creating new server block files into the `/etc/nginx/sites-available` folder and creating symbolic links. 
+
+- Use `sudo systemctl status nginx` to check the nginx status and verify it's running. 
+- Use `sudo systemctl reload nginx` to reload nginx to apply any changes you've made to the configuration.
+- Use `sudo nginx -t` to check for errors in the nginx configuration. 
+
+## Setting Up `ufw`
+
+1. Allow SSH connection in our firewall
+
+`sudo ufw allow ssh`
+
+2. Limit the rate for ssh connections
+
+`sudo ufw limit ssh`
+
+3.  Allow http connections
+
+`sudo ufw allow http`
+
+4. Enable the firewall
+
+`sudo systemctl enable --now ufw.service`
+
+5. Check the status of the firewall to confirm everything is working correctly
+
+`sudo ufw status verbose`
+
+<br>
+
+## Your Web Server is Now Set Up!
+
+With everything complete your final page should look like this: 
+
+![Image of system information on webpage](/Assignment3_P1
+/Success_Screenshot.png)
+
 
 
 
