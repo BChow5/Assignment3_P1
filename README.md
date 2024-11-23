@@ -13,20 +13,29 @@
 <br>
 
 **What does this do?**
+
 `-r`: Creates a system user.
+
 `-d /var/lib/webgen`: Specifies the home directory for the user.
+
 `-s /usr/sbin/nologin`: Sets a non-login shell to prevent direct login.
+<br>
 
 The benefit of creating webgen as a system user because it has limited privileges and is used for running system services or background tasks. Now our user is set up without requiring direct login or unnecessary privileges.
+<br>
 
 2. Create the Home Directory Structure
 
 `mkdir /var/lib/webgen/bin`
 `mkdir /var/lib/webgen/HTML` 
 
+<br>
+
 3. Move the `generate_index` script into the bin folder
 
 `mv generate_index /var/lib/webgen/bin`
+
+<br>
 
 4. Give ownership to webgen and make generate_index executable 
 
@@ -43,16 +52,19 @@ The benefit of creating webgen as a system user because it has limited privilege
 `sudo mv ~/Assignment3_P1/generate-index.service /etc/systemd/system`
 
 `sudo mv ~/Assignment3_P1/generate-index.timer /etc/systemd/system`
+<br>
 
 2. Reload Systemd After the Changes
 
 `sudo systemctl daemon-reload` 
+<br>
 
 3. Enable and Start the Timer
 
 `sudo systemctl enable generate-index.timer`
 
 `sudo systemctl start generate-index.timer`
+<br>
 
 4. Verify the Timer and Service Run Successfully
 
@@ -71,26 +83,32 @@ The benefit of creating webgen as a system user because it has limited privilege
 1. Open the `nginx.conf` file 
 
 `sudo nvim /etc/nginx/nginx.conf`
+<br>
 
 2. Edit it to have `user webgen`
+<br>
 
 3. Make folders for the server block 
 
 `mkdir /etc/nginx/sites-available`
 
 `mkdir /etc/nginx/sites-enabled`
+<br>
 
 4. Add the provided server block file `sites.conf` to `/etc/nginx/sites-available`
+<br>
 
 5. Create a symbolic link 
 
 `ln -s /etc/nginx/sites-available/sites.conf /etc/nginx/sites-enabled/sites.conf`
+<br>
 
 6. Start and enable nginx
 
 `sudo systemctl start nginx`
 
 `sudo systemctl enable nginx`
+<br>
 
 We created a seperate server block file instead of putting it in nginx.conf because it's easier to maintain. We can add sites by creating new server block files into the `/etc/nginx/sites-available` folder and creating symbolic links. 
 
@@ -103,18 +121,22 @@ We created a seperate server block file instead of putting it in nginx.conf beca
 1. Allow SSH connection in our firewall
 
 `sudo ufw allow ssh`
+<br>
 
 2. Limit the rate for ssh connections
 
 `sudo ufw limit ssh`
+<br>
 
 3.  Allow http connections
 
 `sudo ufw allow http`
+<br>
 
 4. Enable the firewall
 
 `sudo systemctl enable --now ufw.service`
+<br>
 
 5. Check the status of the firewall to confirm everything is working correctly
 
@@ -126,8 +148,7 @@ We created a seperate server block file instead of putting it in nginx.conf beca
 
 With everything complete your final page should look like this: 
 
-![Image of system information on webpage](/Assignment3_P1
-/Success_Screenshot.png)
+![Image of system information on webpage](/Success_Screenshot.png)
 
 
 
